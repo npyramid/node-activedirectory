@@ -41,8 +41,7 @@ const escapeLdapDnValue = (value) => {
 };
 
 const escapeLdapDn = (dn) => {
-  return dn
-    .split(',')
+  return dn.split(/(?<!\\),/g)
     .map((current) => {
       const replaceString = '<==>';
       const formattedString = current.replace(/=/, replaceString);
@@ -58,6 +57,9 @@ function parseDistinguishedName(dn) {
   dn = dn.replace(/"/g, '\\"');
   return(dn.replace('\\,', '\\\\,'));
 }
+
+const dn = 'CN=Члены правления\\, вице-президенты и руководители структурных подр,OU=Distribution Groups,OU=Groups,OU=MSK_VTB,DC=region,DC=vtb,DC=ru';
+escapeLdapDn(dn);
 
 filters.forEach((current) => {
   const parsed = parseDistinguishedName(current);
